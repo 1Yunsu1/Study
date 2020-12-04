@@ -1,0 +1,578 @@
+Christmas Car-Arduino Source code
+-----------
+
+    #include <Servo.h>
+    #include <SoftwareSerial.h>
+    SoftwareSerial mySerial(4, 5); //12Pin-TX(HC06),13Pin-RX(HC06)
+    Servo servoLeft;
+    Servo servoRight;
+    
+    void setup() {
+      mySerial.begin(9600);
+     Serial.begin(9600);
+     pinMode(7, OUTPUT);
+     pinMode(6, OUTPUT);
+
+
+     pinMode(10, INPUT);//10
+      pinMode(9, OUTPUT);//9
+      pinMode(3, INPUT);//3
+      pinMode(2, OUTPUT);//2
+
+      servoLeft.attach(13);
+      servoRight.attach(12);
+    }
+    String m;
+    void loop() {
+      int irLeft = irDetect(9, 10, 38000);//9 10
+      int irRight = irDetect(2, 3, 38000);// 2 3
+    
+      if ((irLeft == 0) && (irRight == 0))
+      {
+        maneuver(-200, -200, 20);
+      }
+      else if (irLeft == 0)
+      {
+        maneuver(200, -200, 20);
+      }
+      else if (irRight == 0)
+      {
+        maneuver(-200, 200, 20);
+      }
+      else
+      {
+        maneuver(200, 200, 20);
+      }
+    
+       if (mySerial.available()) {
+        m = mySerial.readString();
+        if (m.indexOf("루돌프") == 0) {
+          digitalWrite(7, HIGH);
+          digitalWrite(6, LOW);
+          Rudolph (8);
+          Serial.println(m);
+        }
+        else if (m.indexOf("징글벨") == 0) {
+          digitalWrite(7, LOW);
+          digitalWrite(6, HIGH);
+          JingleBells(8);
+          Serial.println(m);
+        }
+      }
+
+
+ 
+        }
+
+
+        int irDetect(int irLedPin, int irReceiverPin, long frequency)
+        {
+          tone(irLedPin, frequency, 8);
+          delay(1);
+          int ir = digitalRead(irReceiverPin);
+          delay(1);
+          return ir;
+    }
+
+    void maneuver(int speedLeft, int speedRight, int msTime)
+    {
+      servoLeft.writeMicroseconds(1500 + speedLeft);
+      servoRight.writeMicroseconds(1500 - speedRight);
+      if (msTime == -1)
+      {
+        servoLeft.detach();
+        servoRight.detach();
+      }
+      delay(msTime);
+    }
+
+    void JingleBells (int pin) {
+
+      tone(pin, 523, 400); //도
+      delay(500);
+      tone(pin, 880, 400); //라
+      delay(500);
+      tone(pin, 784, 400); //솔
+      delay(500);
+      tone(pin, 698, 400); //파
+      delay(500);
+      tone(pin, 523, 750); //도
+      delay(850);
+      tone(pin, 523, 400); //도
+      delay(500);
+      tone(pin, 880, 400); //라
+      delay(500);
+      tone(pin, 784, 400); //솔
+      delay(500);
+      tone(pin, 698.400); //파
+      delay(500);
+      tone(pin, 587, 750); //레
+      delay(850);
+
+
+      //1
+      tone(pin, 587, 400); //레
+      delay(500);
+      tone(pin, 988, 400); //시
+      delay(500);
+      tone(pin, 880, 400); //라
+      delay(500);
+      tone(pin, 784, 400); //솔
+      delay(500);
+      tone(pin, 659, 750); //미
+      delay(850);
+      tone(pin, 1047, 400); //높도
+      delay(500);
+      tone(pin, 1047, 400); //높도
+      delay(500);
+      tone(pin, 988, 400);
+      delay(500);
+      tone(pin, 784, 400);
+      delay(500);
+      tone(pin, 880, 400); //수정
+      tone(pin, 698, 500); //수정
+      delay(1000);
+      //레시라 솔미 도도시 솔라파
+
+
+      tone(pin, 523, 400); //도
+      delay(500);
+      tone(pin, 880, 400); //라
+      delay(500);
+      tone(pin, 784, 400); //솔
+      delay(500);
+      tone(pin, 698, 400); //파
+      delay(500);
+      tone(pin, 523, 750); //도
+      delay(850);
+      tone(pin, 523, 400); //도
+      delay(500);
+      tone(pin, 880, 400); //라
+      delay(500);
+      tone(pin, 784, 400); //솔
+      delay(500);
+      tone(pin, 698, 400); //파
+      delay(500);
+      tone(pin, 587, 750); //레
+      delay(850);
+
+      //도라 솔파도 도라 솔파레
+      tone(pin, 587, 400); //레
+      delay(500);
+      tone(pin, 988, 400); //시
+      delay(500);
+      tone(pin, 880, 400); //라
+      delay(500);
+      tone(pin, 784, 400); //솔
+      delay(500);
+      tone(pin, 1047, 400); //높도
+      delay(500);
+      tone(pin, 1047, 400); //높도
+      delay(500);
+      tone(pin, 1047, 400); //높도
+      delay(500);
+      tone(pin, 1047, 400); //높도
+      delay(500);
+      tone(pin, 1175, 400); //높레
+      delay(500);
+      tone(pin, 1047, 400); //높도
+      delay(500);
+      tone(pin, 988, 400);
+      delay(500);
+      tone(pin, 784, 400);
+      delay(500);
+      tone(pin, 698, 750);
+      delay(850);
+
+      //레시라솔 도도도도 레도시솔파
+      tone(pin, 880, 400);
+      delay(500);
+      tone(pin, 880, 400);
+      delay(500);
+      tone(pin, 880, 750);
+      delay(850);
+
+      tone(pin, 880, 400);
+      delay(500);
+      tone(pin, 880, 400);
+      delay(500);
+      tone(pin, 880, 750);
+      delay(850);
+
+      tone(pin, 880, 400);
+      delay(500);
+      tone(pin, 1047, 400);
+      delay(500);
+      tone(pin, 698, 400);
+      delay(500);
+
+      tone(pin, 784, 400);
+      delay(500);
+      tone(pin, 880, 750);
+      delay(800);
+
+      //라라라 라라라 라도파 솔라
+      tone(pin, 988, 400);
+      delay(500);
+      tone(pin, 988, 400);
+      delay(500);
+      tone(pin, 988, 400);
+      delay(500);
+      tone(pin, 988, 400);
+      delay(500);
+
+      tone(pin, 988, 400);
+      delay(500);
+      tone(pin, 880, 400); //라
+      delay(500);
+      tone(pin, 880, 400); //라
+      delay(500);
+      tone(pin, 880, 400); //라
+      delay(500);
+
+      tone(pin, 880, 400); //라
+      delay(500);
+      tone(pin, 784, 400);
+      delay(500);
+      tone(pin, 784, 400);
+     delay(500);
+
+      tone(pin, 698, 400);
+      delay(500);
+      tone(pin, 784, 400);
+      delay(500);
+      tone(pin, 1047, 750);
+      delay(800);
+
+      //시시시시 시라라라 라솔솔 파솔높도
+      tone(pin, 880, 400);
+      delay(500);
+      tone(pin, 880, 400);
+      delay(500);
+      tone(pin, 880, 750);
+      delay(850);
+
+      tone(pin, 880, 400);
+      delay(500);
+      tone(pin, 880, 400);
+      delay(500);
+      tone(pin, 880, 750);
+      delay(850);
+
+      tone(pin, 880, 400);
+      delay(500);
+      tone(pin, 1047, 400);
+      delay(400);
+      tone(pin, 698, 400);
+      delay(500);
+
+      tone(pin, 784, 400);
+      delay(500);
+      tone(pin, 880, 750);
+      delay(800);
+
+      //라라라 라라라 라도파 솔라
+      tone(pin, 988, 400);
+      delay(500);
+      tone(pin, 988, 400);
+      delay(500);
+      tone(pin, 988, 400);
+      delay(500);
+      tone(pin, 988, 400);
+      delay(500);
+
+      tone(pin, 988, 400);
+      delay(500);
+      tone(pin, 880, 400); //라
+      delay(500);
+      tone(pin, 880, 400); //라
+      delay(500);
+      tone(pin, 880, 400); //라
+      delay(500);
+
+      tone(pin, 1047, 400);
+      delay(500);
+      tone(pin, 1047, 400);
+      delay(500);
+      tone(pin, 988, 400);
+      delay(500);
+      tone(pin, 784, 400);
+      delay(500);
+
+      tone(pin, 698, 750);
+      delay(850);
+
+    }
+
+    void Rudolph (int pin) {
+      //도262    레294   미330   파349    솔392    라440    시494    도523 레587 미659
+      //솔라솔
+      tone(pin, 392, 400);
+      delay(500);
+      tone(pin, 440, 400);
+      delay(500);
+      tone(pin, 392, 600);
+      delay(700);
+
+      //미도라솔
+      tone(pin, 330, 400);
+      delay(500);
+      tone(pin, 523, 400);
+      delay(500);
+      tone(pin, 440, 400);
+      delay(500);
+      tone(pin, 392, 400);
+      delay(500);
+
+      //솔라솔라
+      tone(pin, 392, 400);
+      delay(500);
+      tone(pin, 440, 400);
+      delay(500);
+      tone(pin, 392, 400);
+      delay(500);
+      tone(pin, 440, 400);
+      delay(500);
+
+      //솔도시
+      tone(pin, 392, 400);
+      delay(500);
+      tone(pin, 523, 400);
+      delay(500);
+      tone(pin, 494, 400);
+      delay(500);
+
+      //파솔파레
+      tone(pin, 349, 400);
+      delay(500);
+      tone(pin, 392, 400);
+      delay(500);
+      tone(pin, 349, 400);
+      delay(500);
+      tone(pin, 587, 400);
+      delay(500);
+
+      //시라솔
+      tone(pin, 494, 400);
+      delay(500);
+      tone(pin, 440, 400);
+      delay(500);
+      tone(pin, 392, 400);
+      delay(500);
+
+      //솔라솔라
+      tone(pin, 392, 400);
+      delay(500);
+      tone(pin, 440, 400);
+      delay(500);
+      tone(pin, 392, 400);
+      delay(500);
+      tone(pin, 440, 400);
+      delay(500);
+
+      //솔라미
+      tone(pin, 392, 400);
+      delay(500);
+      tone(pin, 440, 400);
+      delay(500);
+      tone(pin, 659, 400);
+      delay(500);
+
+      //파솔파레
+      tone(pin, 349, 400);
+      delay(500);
+      tone(pin, 392, 400);
+      delay(500);
+      tone(pin, 349, 400);
+     delay(500);
+      tone(pin, 587, 400);
+      delay(500);
+
+      //시라솔
+      tone(pin, 494, 400);
+      delay(500);
+      tone(pin, 440, 400);
+      delay(500);
+      tone(pin, 392, 400);
+      delay(500);
+
+      //솔라솔라
+      tone(pin, 392, 400);
+      delay(500);
+      tone(pin, 440, 400);
+      delay(500);
+      tone(pin, 392, 400);
+      delay(500);
+      tone(pin, 440, 400);
+      delay(500);
+
+      //솔도시
+      tone(pin, 392, 400);
+      delay(500);
+      tone(pin, 523, 400);
+      delay(500);
+      tone(pin, 494, 400);
+      delay(500);
+
+      //파솔파레시라솔
+      tone(pin, 349, 400);
+      delay(500);
+      tone(pin, 392, 400);
+      delay(500);
+       tone(pin, 349, 400);
+      delay(500);
+      tone(pin, 587, 400);
+      delay(500);
+      tone(pin, 494, 400);
+      delay(500);
+      tone(pin, 440, 400);
+      delay(500);
+      tone(pin, 392, 400);
+      delay(500);
+
+      //솔라솔레도
+      tone(pin, 392, 400);
+      delay(500);
+      tone(pin, 440, 400);
+      delay(500);
+      tone(pin, 392, 400);
+      delay(500);
+      tone(pin, 587, 400);
+      delay(500);
+      tone(pin, 523, 400);
+      delay(500);
+
+      //라라도라
+      tone(pin, 440, 400);
+      delay(500);
+      tone(pin, 440, 400);
+      delay(500);
+      tone(pin, 523, 400);
+      delay(500);
+      tone(pin, 440, 400);
+      delay(500);
+
+      //솔미솔
+      tone(pin, 392, 400);
+      delay(500);
+      tone(pin, 659, 400);
+      delay(500);
+      tone(pin, 392, 400);
+      delay(500);
+
+      //파라
+      tone(pin, 349, 400);
+      delay(500);
+      tone(pin, 440, 400);
+      delay(500);
+      //솔파미
+      tone(pin, 392, 400);
+      delay(500);
+      tone(pin, 349, 400);
+      delay(500);
+      tone(pin, 659, 400);
+      delay(500);
+
+      //레미솔라
+      tone(pin, 587, 400);
+      delay(500);
+      tone(pin, 659, 400);
+      delay(500);
+      tone(pin, 392, 400);
+      delay(500);
+      tone(pin, 440, 400);
+      delay(500);
+
+      //시시시
+      tone(pin, 494, 400);
+      delay(500);
+      tone(pin, 494, 400);
+      delay(500);
+      tone(pin, 494 , 400);
+      delay(500);
+
+
+
+      //도도시라
+      tone(pin, 523, 400);
+      delay(500);
+      tone(pin, 523, 400);
+      delay(500);
+      tone(pin, 494, 400);
+      delay(500);
+      tone(pin, 440, 400);
+      delay(500);
+
+      //솔파레
+      tone(pin, 392, 400);
+      delay(500);
+      tone(pin, 349, 400);
+      delay(500);
+      tone(pin, 587, 400);
+      delay(500);
+
+      //솔라솔미도라솔
+      tone(pin, 392, 400);
+      delay(500);
+      tone(pin, 440, 400);
+      delay(500);
+      tone(pin, 392, 400);
+      delay(500);
+      tone(pin, 659, 400);
+      delay(500);
+      tone(pin, 523, 400);
+      delay(500);
+      tone(pin, 440, 400);
+      delay(500);
+      tone(pin, 392, 400);
+      delay(500);
+
+      //솔라솔라
+      tone(pin, 392, 400);
+      delay(500);
+      tone(pin, 440, 400);
+      delay(500);
+      tone(pin, 392, 400);
+      delay(500);
+      tone(pin, 440, 400);
+      delay(500);
+
+      //솔도시
+      tone(pin, 392, 400);
+      delay(500);
+      tone(pin, 523, 400);
+      delay(500);
+      tone(pin, 494, 400);
+      delay(500);
+
+      //파솔파레시라솔
+      tone(pin, 349, 400);
+      delay(500);
+      tone(pin, 392, 400);
+      delay(500);
+      tone(pin, 349 , 400);
+      delay(500);
+      tone(pin, 587, 400);
+      delay(500);
+      tone(pin, 494, 400);
+      delay(500);
+      tone(pin, 440, 400);
+      delay(500);
+      tone(pin, 392, 400);
+      delay(500);
+
+      //솔라솔라레도
+      tone(pin, 392 , 400);
+      delay(500);
+      tone(pin, 440, 400);
+      delay(500);
+      tone(pin, 392, 400);
+      delay(500);
+      tone(pin, 440, 400);
+      delay(500);
+      tone(pin, 587 , 400);
+      delay(500);
+      tone(pin, 523, 400);
+      delay(500);
+
+    }
